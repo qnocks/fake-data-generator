@@ -13,39 +13,49 @@ public class ErrorsService {
 
     private String locale;
 
-    public void addErrors(User user, double error, String locale) {
+    public User addErrors(User user, double error, String locale) {
 
         this.locale = locale;
 
         while (error > 0) {
 
+            // if error has decimal part
+            if ((error % 1) == 0) {
+                processErrors(user);
+                error--;
+            }
+
             // if error has fractional part
             if (!((int) error == error)) {
-
                 double fractionalPart = error % 1;
-                int bound = (int) (1 / fractionalPart);
+                int bound = (int) (fractionalPart * 100);
 
-                
+                if (getRandom().nextInt(100) < bound) {
+                    processErrors(user);
+                }
 
-
+                error -= fractionalPart;
             }
+        }
 
-            String field = chooseFieldToError(user);
-            String fieldWithError = addError(field, Objects.requireNonNull(chooseError()));
+        return user;
+    }
 
-            if (user.getFullName().equals(field)) {
-                user.setFullName(fieldWithError);
-            }
-            else if (user.getAddress().equals(field)) {
-                user.setAddress(fieldWithError);
-            }
-            else if (user.getPhone().equals(field)) {
-                user.setPhone(fieldWithError);
-            }
+    private void processErrors(User user) {
+        String field = chooseFieldToError(user);
+        String fieldWithError = addError(field, Objects.requireNonNull(chooseError()));
 
-            error--;
+        if (user.getFullName().equals(field)) {
+            user.setFullName(fieldWithError);
+        }
+        else if (user.getAddress().equals(field)) {
+            user.setAddress(fieldWithError);
+        }
+        else if (user.getPhone().equals(field)) {
+            user.setPhone(fieldWithError);
         }
     }
+
 
     private String addError(String target, Function<String, String> error) {
         return error.apply(target);
