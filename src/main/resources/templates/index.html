@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+    <body>
+        <div class="form-group">
+            <form th:action="@{/}" method="get">
+                <select name="locale">
+                    <option th:each="locale : ${locales}" th:value="${locale}" th:text="${locale}"></option>
+                </select>
+                <label for="seed">Seed</label>
+                <input type="text" id="seed" th:value="*{seed}" th:placeholder="${seed}">
+                <input type="submit" value="refresh" class="btn btn-primary">
+            </form>
+        </div>
+        <table class="table table-striped form-group">
+            <thead>
+            <tr>
+                <th scope="col">Number</th>
+                <th scope="col">ID</th>
+                <th scope="col">Full name</th>
+                <th scope="col">Address</th>
+                <th scope="col">Phone</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.number}"></td>
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.fullName}"></td>
+                    <td th:text="${user.address}"></td>
+                    <td th:text="${user.phone}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
