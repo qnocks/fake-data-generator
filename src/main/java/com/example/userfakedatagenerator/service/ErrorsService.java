@@ -14,34 +14,36 @@ public class ErrorsService {
     private String locale;
 
     public User addErrors(User user, double error, String locale) {
-
         this.locale = locale;
 
         while (error > 0) {
-
-            // if error has decimal part
-            if ((error % 1) == 0) {
-                processErrors(user);
-                error--;
-            }
-
-            // if error has fractional part
-            if (!((int) error == error)) {
-                double fractionalPart = error % 1;
-                int bound = (int) (fractionalPart * 100);
-
-                if (getRandom().nextInt(100) < bound) {
-                    processErrors(user);
-                }
-
-                error -= fractionalPart;
-            }
+           double diff = divideError(error, user);
+           error -= diff;
         }
 
         return user;
     }
 
-    private void processErrors(User user) {
+    private double divideError(double error, User user) {
+        if ((error % 1) == 0) {
+            processError(user);
+            return 1.0;
+        }
+
+        if (!((int) error == error)) {
+            double fractionalPart = error % 1;
+            int bound = (int) (fractionalPart * 100);
+
+            if (getRandom().nextInt(100) < bound) {
+                processError(user);
+            }
+
+            return fractionalPart;
+        }
+        return .0;
+    }
+
+    private void processError(User user) {
         String field = chooseFieldToError(user);
         String fieldWithError = addError(field, Objects.requireNonNull(chooseError()));
 
@@ -62,18 +64,26 @@ public class ErrorsService {
     }
 
     private String deleteSymbol(String input) {
+        if (input.length() <= 1) return "";
+
         StringBuilder sb = new StringBuilder(input);
         sb.deleteCharAt(getRandom().nextInt(input.length()));
+
         return sb.toString();
     }
 
     private String addSymbol(String input) {
+        if (input.length() <= 1) return "";
+
         StringBuilder sb = new StringBuilder(input);
         sb.insert(getRandom().nextInt(input.length()), FakerUtil.getRandomChar(locale));
+
         return sb.toString();
     }
 
     private String replaceSymbol(String input) {
+        if (input.length() <= 1) return "";
+
         int idx = getRandom().nextInt(input.length() - 1);
 
         char[] chars = input.toCharArray();
@@ -109,11 +119,6 @@ public class ErrorsService {
             default:
                 return null;
         }
-    }
-
-    private char getRandomCharInString(String input) {
-        int idx = getRandom().nextInt(input.length());
-        return input.charAt(idx);
     }
 
     private Random getRandom() {

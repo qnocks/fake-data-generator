@@ -13,7 +13,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class User {
 
-
     private Long number;
 
     @Id
@@ -24,5 +23,4 @@ public class User {
     private String address;
 
     private String phone;
-
 }

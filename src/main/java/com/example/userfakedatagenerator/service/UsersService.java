@@ -1,6 +1,5 @@
 package com.example.userfakedatagenerator.service;
 
-import com.example.userfakedatagenerator.repository.UsersPageRepository;
 import com.example.userfakedatagenerator.repository.UsersRepository;
 import com.example.userfakedatagenerator.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,30 +14,21 @@ public class UsersService {
 
     private final UsersRepository usersRepository;
 
-    private final UsersPageRepository usersPageRepository;
-
     @Autowired
-    public UsersService(UsersRepository usersRepository, UsersPageRepository usersPageRepository) {
+    public UsersService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
-        this.usersPageRepository = usersPageRepository;
     }
 
     public void add(User user) {
-//        usersRepository.add(user);
-        usersPageRepository.save(user);
-    }
-
-    public List<User> getAllByNumber() {
-        return usersPageRepository.findAllByOrderByNumberAsc();
+        usersRepository.save(user);
     }
 
     public Page<User> getAll(Pageable pageable) {
-        return usersPageRepository.findAll(pageable);
+        return usersRepository.findAll(pageable);
     }
 
     public List<User> getAll() {
-//        return usersRepository.findAll();
-        return usersPageRepository.findAll();
+        return usersRepository.findAll();
     }
 
     public boolean isUnique(long id) {
@@ -46,7 +36,6 @@ public class UsersService {
     }
 
     public void clear() {
-//        usersRepository.clear();
-        usersPageRepository.deleteAll();
+        usersRepository.deleteAll();
     }
 }

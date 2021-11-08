@@ -3,6 +3,7 @@ package com.example.userfakedatagenerator.controller;
 import com.example.userfakedatagenerator.domain.User;
 import com.example.userfakedatagenerator.service.FakerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,9 @@ import java.util.Arrays;
 @Controller
 @RequestMapping("/")
 public class FakerController {
+
+    @Value("${app.fake.count}")
+    private Integer initialCount;
 
     private final FakerService fakerService;
 
@@ -33,7 +37,7 @@ public class FakerController {
         model.addAttribute("error", error);
         model.addAttribute("seed", seed);
 
-        Page<User> users = fakerService.generateUsers(locale, error, seed, 1000);
+        Page<User> users = fakerService.generateUsers(locale, error, seed, initialCount);
         model.addAttribute("users", users);
 
         return "index";
