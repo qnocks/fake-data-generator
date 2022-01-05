@@ -13,6 +13,4 @@ public class FakerUtil {
         int i = new Random().nextInt(chars.length);
         return chars[i];
     }
-
-
 }

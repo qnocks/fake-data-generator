@@ -30,5 +30,4 @@ public class UsersRestController {
         Pageable pageable = PageRequest.of(page, size, Sort.by("number").ascending());
         return usersRepository.findAll(pageable);
     }
-
 }
